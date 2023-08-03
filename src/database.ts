@@ -6,7 +6,7 @@ const pool = new Pool({
   password: 'root',
   port: 5432,
 });
-const getMerchants = () => {
+const getusers = () => {
   return new Promise(function(resolve, reject) {
     pool.query('SELECT * FROM datacity ORDER BY id ASC', (error:any, results:any) => {
       if (error) {
@@ -16,31 +16,25 @@ const getMerchants = () => {
     })
   }) 
 }
-const createMerchant = (body:any) => {
+const createuser = (body:any) => {
+  const {name,email,password } = body
   return new Promise(function(resolve, reject) {
-    const { name, email,password } = body
-    pool.query('INSERT INTO merchants (name, email,password) VALUES ($1, $2 ,$3) RETURNING *', [name, email,password], (error:any, results:any) => {
+    pool.query('INSERT INTO users (name, email,password) VALUES ($1, $2 ,$3) RETURNING *', [name, email,password], (error:any, results:any) => {
       if (error) {
         reject(error)
       }
-      if (results.rowCount === 1) {
         resolve(true)
-        // Do something with the inserted row data
-      } else {
-        resolve('something wrong happened');
-      }
     })
   })
 }
-const deleteMerchant = (body:any) => {
+const deleteuser = (body:any) => {
   const {email,password} =body
   return new Promise(function(resolve, reject) {
-    pool.query('select name FROM merchants WHERE email= $1 and password= $2', [email,password], (error:any, results:any) => {
+    pool.query('select name FROM users WHERE email= $1 and password= $2', [email,password], (error:any, results:any) => {
       if (error) {
         reject(error);
       }
       if (results.rowCount === 0) {
-        // No matching record found
         resolve("Invalid email or password.");
       } else {
         resolve(true);
@@ -48,10 +42,10 @@ const deleteMerchant = (body:any) => {
     });
   })
 }
-const editMerchant = (body:any) => {
+const edituser = (body:any) => {
   const {email,nPassword,password}=body
   return new Promise(function(resolve, reject) {
-    pool.query('Update merchants set password= $1 where password=$2 and email=$3', [nPassword,password,email], (error:any, results:any) => {
+    pool.query('Update users set password= $1 where password=$2 and email=$3', [nPassword,password,email], (error:any, results:any) => {
       if (error) {
         reject(error);
       }
@@ -64,8 +58,8 @@ const editMerchant = (body:any) => {
   })
 }
 module.exports = {
-  getMerchants,
-  createMerchant,
-  deleteMerchant,
-  editMerchant
+  getusers,
+  createuser,
+  deleteuser,
+  edituser
 }

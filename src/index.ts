@@ -5,7 +5,7 @@ const express = require('express')
 const app = express()
 const port = 5173
 const cors = require('cors');
-const merchant_model = require('./database')
+const user_model = require('./database')
 
 app.use(express.json())
 app.use(function (req:any, res:any, next:any) {
@@ -16,7 +16,7 @@ app.use(function (req:any, res:any, next:any) {
 });
 
 app.get('/mainpage', (req:any, res:any) => {
-  merchant_model.getMerchants()
+  user_model.getusers()
   .then((Response:any) => {
     res.status(200).send(Response);
   })
@@ -25,8 +25,8 @@ app.get('/mainpage', (req:any, res:any) => {
   })
 })
 
-app.post('/merchants', (req:any, res:any) => {
-  merchant_model.createMerchant(req.body)
+app.post('/users/signup', (req:any, res:any) => {
+  user_model.createuser(req.body)
   .then((Response:any) => {
     res.status(200).send(Response);
   })
@@ -35,8 +35,8 @@ app.post('/merchants', (req:any, res:any) => {
   })
 })
 
-app.delete('/merchants/signin', (req:any, res:any) => {
-  merchant_model.deleteMerchant(req.body)
+app.delete('/users/signin', (req:any, res:any) => {
+  user_model.deleteuser(req.body)
   .then((Response:any)=> {
     res.status(200).send(Response);
   })
@@ -44,8 +44,8 @@ app.delete('/merchants/signin', (req:any, res:any) => {
     res.status(500).send(Error);
   })
 })
-app.post('/merchants/pass', (req:any, res:any) => {
-  merchant_model.editMerchant(req.body)
+app.post('/users/pass', (req:any, res:any) => {
+  user_model.edituser(req.body)
   .then((Response:any)=> {
     res.status(200).send(Response);
   })
